@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/xcodeme21/go-crm-service/api/cms/controller"
+	"github.com/xcodeme21/go-crm-service/api/cms/controllers"
+	"github.com/xcodeme21/go-crm-service/api/cms/services"
+	"github.com/xcodeme21/go-crm-service/api/cms/providers"
 	"github.com/xcodeme21/go-crm-service/database"
 
 	"github.com/gin-contrib/cors"
@@ -60,14 +62,20 @@ func main() {
 	r.Use(database.Inject(db))
 
 	//Seeder
-	database.SourceSeeder()
+	database.VoucherCategories()
 
 	//Connection
 	cn, _ := database.Connect()
 
-	internalGroup := r.Group("/api/internal")
-	categoriesController := controllers.VoucherCategoriesController{DB: cn}
-	internalGroup.GET("/voucher-categories", categoriesController.ListCategories)
+	voucherCategoriesService := services.NewVoucherCategoriesService(providers.NewDBVoucherCategoriesProvider(cn))
+
+	// Dereference the pointer to pass the underlying value to the constructor
+	categoriesController := controllers.NewVoucherCategoriesController(*voucherCategoriesService)
+
+	cmsGroup := r.Group("/api/cms/")
+	cmsGroup.GET("/voucher-categories", categoriesController.ListCategories)
+	cmsGroup.GET("/voucher-categories/:id", categoriesController.DetailCategory)
+
 
 	port := os.Getenv("PORT")
 	r.NoRoute(lostInSpce)
