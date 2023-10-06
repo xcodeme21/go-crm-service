@@ -75,6 +75,9 @@ func main() {
 	cmsGroup := r.Group("/api/cms/")
 	cmsGroup.GET("/voucher-categories", categoriesController.ListCategories)
 	cmsGroup.GET("/voucher-categories/:id", categoriesController.DetailCategory)
+	cmsGroup.POST("/voucher-categories", categoriesController.CreateCategory)
+	cmsGroup.PUT("/voucher-categories/:id", categoriesController.UpdateCategory)
+	cmsGroup.DELETE("/voucher-categories/:id", categoriesController.DeleteCategory)
 
 
 	port := os.Getenv("PORT")

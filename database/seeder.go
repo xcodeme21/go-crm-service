@@ -26,7 +26,7 @@ func VoucherCategories() {
 		// Tambahkan data ke tabel
 		for i := 1; i <= 10; i++ {
 			name := fmt.Sprintf("Category %d", i)
-			db.Create(&models.VoucherCategories{Name: name, ID: i, CreatedAt: time.Now(), UpdatedAt: time.Now()})
+			db.Create(&models.VoucherCategories{Name: name, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 		}
 
 		// Menampilkan data

@@ -7,8 +7,8 @@ import (
 // VoucherCategories :nodoc
 type VoucherCategories struct {
 	gorm.Model
-	Name  string `gorm:"type:varchar(150);"`
-	Status          int    `gorm:"default:0;"`
+	Name               string `gorm:"type:varchar(150);unique"`
+	// Status                  bool   `gorm:"type:boolean;default:true;"`
 }
 
 // MigrateVoucherCategories :nodoc
