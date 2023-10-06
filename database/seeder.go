@@ -23,11 +23,12 @@ func VoucherCategories() {
 	if cek.ID != 0 {
 		fmt.Println("Data found")
 	} else {
-		// Tambahkan data ke tabel
-		for i := 1; i <= 10; i++ {
-			name := fmt.Sprintf("Category %d", i)
-			db.Create(&models.VoucherCategories{Name: name, CreatedAt: time.Now(), UpdatedAt: time.Now()})
+		var categories = []string{"Gadget & Accessories", "Food & Beverages", "Entertainment", "Health & Beauty", "Fashion", "Groceries"}
+
+		for _, category := range categories {
+			db.Create(&models.VoucherCategories{Name: category, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 		}
+
 
 		// Menampilkan data
 		var products []models.VoucherCategories

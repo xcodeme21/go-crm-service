@@ -104,6 +104,13 @@ func (c *VoucherCategoriesController) DeleteCategory(ctx *gin.Context) {
         return
     }
 
+    // Check if the category exists
+    _, err = c.service.GetCategoryByID(id)
+    if err != nil {
+        helper.JSONResponse(ctx, http.StatusNotFound, nil, "Category not found")
+        return
+    }
+
     err = c.service.DeleteCategory(id)
     if err != nil {
         helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
@@ -112,4 +119,5 @@ func (c *VoucherCategoriesController) DeleteCategory(ctx *gin.Context) {
 
     helper.JSONResponse(ctx, http.StatusOK, nil, "Category deleted successfully")
 }
+
 
