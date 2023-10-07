@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/xcodeme21/go-crm-service/api/cms/controllers"
-	"github.com/xcodeme21/go-crm-service/api/cms/services"
 	"github.com/xcodeme21/go-crm-service/api/cms/providers"
+	"github.com/xcodeme21/go-crm-service/api/cms/services"
 	"github.com/xcodeme21/go-crm-service/database"
 
 	"github.com/gin-contrib/cors"
@@ -78,7 +78,6 @@ func main() {
 	cmsGroup.POST("/voucher-categories", categoriesController.CreateCategory)
 	cmsGroup.PUT("/voucher-categories/:id", categoriesController.UpdateCategory)
 	cmsGroup.DELETE("/voucher-categories/:id", categoriesController.DeleteCategory)
-
 
 	port := os.Getenv("PORT")
 	r.NoRoute(lostInSpce)

@@ -29,7 +29,6 @@ func VoucherCategories() {
 			db.Create(&models.VoucherCategories{Name: category, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 		}
 
-
 		// Menampilkan data
 		var products []models.VoucherCategories
 		db.Find(&products)

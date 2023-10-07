@@ -7,12 +7,12 @@ import (
 // VoucherCategories :nodoc
 type VoucherCategories struct {
 	gorm.Model
-	Name               string `gorm:"type:varchar(150);unique"`
+	Name string `gorm:"type:varchar(150);unique"`
 	// Status                  bool   `gorm:"type:boolean;default:true;"`
 }
 
 // MigrateVoucherCategories :nodoc
-func MigrateVoucherCategories(db *gorm.DB) {
+func MigrateVoucherCategories(db *gorm.DB) error {
 	const tableName = "voucher_categories"
 	// todo to change if need to changing
 	const version = "1.1"
@@ -25,7 +25,9 @@ func MigrateVoucherCategories(db *gorm.DB) {
 	// First create installer table
 	if migrateData.Table == "" {
 		if !db.Migrator().HasTable(&VoucherCategoriesData) {
-			db.AutoMigrate(&VoucherCategories{})
+			if err := db.AutoMigrate(&VoucherCategories{}); err != nil {
+				return err // Handle the error, e.g., log it or return it
+			}
 			db.Create(&Migrate{
 				Table:   tableName,
 				Version: version,
@@ -35,9 +37,14 @@ func MigrateVoucherCategories(db *gorm.DB) {
 
 	// Upgrade version
 	if migrateData.Version == "1.0" {
-		db.AutoMigrate(&VoucherCategories{})
+		if err := db.AutoMigrate(&VoucherCategories{}); err != nil {
+			return err // Handle the error, e.g., log it or return it
+		}
 		migrateData.Version = version
-		db.Save(&migrateData)
+		if err := db.Save(&migrateData).Error; err != nil {
+			return err // Handle the error, e.g., log it or return it
+		}
 	}
 
+	return nil // No errors, return nil
 }
