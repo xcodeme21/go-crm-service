@@ -13,9 +13,16 @@ import (
 // Initialize initializes the database
 func Initialize() (*gorm.DB, error) {
 	db, err := Connect()
-	migration.MigrateExec(db)
+	if err != nil {
+		return nil, err // Return the error if connecting to the database fails
+	}
 
-	return db, err
+	err = migration.MigrateExec(db)
+	if err != nil {
+		return nil, err // Return the error if migration fails
+	}
+
+	return db, nil
 }
 
 // Connect Connection to database
@@ -45,8 +52,9 @@ func Connect() (*gorm.DB, error) {
 
 	if err != nil {
 		log.Println("Connected to database Failed:", err)
+		return nil, err // Return the error if connecting to the database fails
 	}
 	log.Println("Connected to database")
 
-	return db, err
+	return db, nil
 }

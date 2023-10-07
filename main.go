@@ -44,7 +44,7 @@ func main() {
 	r.GET("/welcome", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"error":   false,
-			"message": "Yayyyy I'am Gin Gonic",
+			"message": "Yayyyy I'm Gin Gonic",
 		})
 	})
 
@@ -58,14 +58,20 @@ func main() {
 	createDatabase()
 
 	// Initializes databaseSource
-	db, _ := database.Initialize()
+	db, err := database.Initialize()
+	if err != nil {
+		log.Fatalf("Error initializing database: %v", err)
+	}
 	r.Use(database.Inject(db))
 
-	//Seeder
+	// Seeder
 	database.VoucherCategories()
 
-	//Connection
-	cn, _ := database.Connect()
+	// Connection
+	cn, err := database.Connect()
+	if err != nil {
+		log.Fatalf("Error connecting to the database: %v", err)
+	}
 
 	voucherCategoriesService := services.NewVoucherCategoriesService(providers.NewDBVoucherCategoriesProvider(cn))
 
@@ -81,5 +87,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	r.NoRoute(lostInSpce)
-	r.Run(":" + port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatalf("Error starting the server: %v", err)
+	}
 }
