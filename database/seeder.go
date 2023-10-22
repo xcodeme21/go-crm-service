@@ -26,7 +26,7 @@ func VoucherCategories() {
 		var categories = []string{"Gadget & Accessories", "Food & Beverages", "Entertainment", "Health & Beauty", "Fashion", "Groceries"}
 
 		for _, category := range categories {
-			db.Create(&models.VoucherCategories{Name: category, CreatedAt: time.Now(), UpdatedAt: time.Now()})
+			db.Create(&models.VoucherCategories{Name: category, Status: true, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 		}
 
 		// Menampilkan data

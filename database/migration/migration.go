@@ -31,6 +31,7 @@ func MigrateExec(db *gorm.DB) error {
 	}
 
 	// Call other table migration functions here, e.g., MigrateVoucherCategories(db)
+	MigrateVoucherCategories(db)
 
 	log.Println("Auto Migration has been processed")
 	return nil

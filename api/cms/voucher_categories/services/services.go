@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/xcodeme21/go-crm-service/api/cms/providers"
+	"github.com/xcodeme21/go-crm-service/api/cms/voucher_categories/providers"
 	"github.com/xcodeme21/go-crm-service/models"
 )
 

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/xcodeme21/go-crm-service/api/cms/controllers"
-	"github.com/xcodeme21/go-crm-service/api/cms/providers"
-	"github.com/xcodeme21/go-crm-service/api/cms/services"
+	"github.com/xcodeme21/go-crm-service/api/cms/voucher_categories/controllers"
+	"github.com/xcodeme21/go-crm-service/api/cms/voucher_categories/providers"
+	"github.com/xcodeme21/go-crm-service/api/cms/voucher_categories/services"
 	"github.com/xcodeme21/go-crm-service/database"
 
 	"github.com/gin-contrib/cors"

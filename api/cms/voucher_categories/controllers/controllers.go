@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xcodeme21/go-crm-service/api/cms/services"
+	"github.com/xcodeme21/go-crm-service/api/cms/voucher_categories/services"
 	"github.com/xcodeme21/go-crm-service/models"
 	helper "github.com/xcodeme21/go-crm-service/utils"
 )
