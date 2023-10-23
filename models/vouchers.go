@@ -14,7 +14,6 @@ type Vouchers struct {
 	Point   int64 `json:"point"`
 	Tier   string `json:"tier"`
 	CategoryId   int `json:"category_id"`
-	Category      VoucherCategories `json:"category"`
 	IsLimited bool   `json:"is_limited"`
 	StartDate         time.Time `json:"start_date"`
     EndDate           time.Time `json:"end_date"`

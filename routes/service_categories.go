@@ -21,9 +21,9 @@ func VoucherCategoriesRoutes(r *gin.Engine) {
 	categoriesController := controllers.NewVoucherCategoriesController(*voucherCategoriesService)
 
 	cmsGroup := r.Group("/api/cms/")
-	cmsGroup.GET("/voucher-categories", categoriesController.ListCategories)
-	cmsGroup.GET("/voucher-categories/:id", categoriesController.DetailCategory)
-	cmsGroup.POST("/voucher-categories", categoriesController.CreateCategory)
-	cmsGroup.PUT("/voucher-categories/:id", categoriesController.UpdateCategory)
-	cmsGroup.DELETE("/voucher-categories/:id", categoriesController.DeleteCategory)
+	cmsGroup.GET("/voucher-categories", categoriesController.FindAll)
+	cmsGroup.GET("/voucher-categories/:id", categoriesController.Detail)
+	cmsGroup.POST("/voucher-categories", categoriesController.Create)
+	cmsGroup.PUT("/voucher-categories/:id", categoriesController.Update)
+	cmsGroup.DELETE("/voucher-categories/:id", categoriesController.Delete)
 }

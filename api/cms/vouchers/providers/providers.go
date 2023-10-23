@@ -6,11 +6,11 @@ import (
 )
 
 type VouchersProvider interface {
-	ListCategories() ([]models.Vouchers, error)
+	FindAll() ([]models.Vouchers, error)
 	GetCategoryByID(id int) (*models.Vouchers, error)
-	CreateCategory(newCategory models.Vouchers) (*models.Vouchers, error)
-	UpdateCategory(id int, updatedCategory models.Vouchers) (*models.Vouchers, error)
-	DeleteCategory(id int) error
+	Create(newCategory models.Vouchers) (*models.Vouchers, error)
+	Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error)
+	Delete(id int) error
 }
 
 type DBVouchersProvider struct {
@@ -23,7 +23,7 @@ func NewDBVouchersProvider(DB *gorm.DB) VouchersProvider {
 	}
 }
 
-func (p *DBVouchersProvider) ListCategories() ([]models.Vouchers, error) {
+func (p *DBVouchersProvider) FindAll() ([]models.Vouchers, error) {
 	var categories []models.Vouchers
 	err := p.DB.Order("id asc").Find(&categories).Error
 	if err != nil {
@@ -42,7 +42,7 @@ func (p *DBVouchersProvider) GetCategoryByID(id int) (*models.Vouchers, error) {
 	return &category, nil
 }
 
-func (p *DBVouchersProvider) CreateCategory(newCategory models.Vouchers) (*models.Vouchers, error) {
+func (p *DBVouchersProvider) Create(newCategory models.Vouchers) (*models.Vouchers, error) {
 	// Insert the new category into the database
 	if err := p.DB.Create(&newCategory).Error; err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (p *DBVouchersProvider) CreateCategory(newCategory models.Vouchers) (*model
 	return &newCategory, nil
 }
 
-func (p *DBVouchersProvider) UpdateCategory(id int, updatedCategory models.Vouchers) (*models.Vouchers, error) {
+func (p *DBVouchersProvider) Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error) {
 	// Fetch the existing category by ID
 	var existingCategory models.Vouchers
 	if err := p.DB.First(&existingCategory, id).Error; err != nil {
@@ -65,7 +65,7 @@ func (p *DBVouchersProvider) UpdateCategory(id int, updatedCategory models.Vouch
 	return &existingCategory, nil
 }
 
-func (p *DBVouchersProvider) DeleteCategory(id int) error {
+func (p *DBVouchersProvider) Delete(id int) error {
 	// Delete the category by ID
 	return p.DB.Delete(&models.Vouchers{}, id).Error
 }

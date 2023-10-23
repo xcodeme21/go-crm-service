@@ -20,8 +20,8 @@ func NewVoucherCategoriesController(service services.VoucherCategoriesService) *
 	}
 }
 
-func (c *VoucherCategoriesController) ListCategories(ctx *gin.Context) {
-	products, err := c.service.ListCategories()
+func (c *VoucherCategoriesController) FindAll(ctx *gin.Context) {
+	products, err := c.service.FindAll()
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
 		return
@@ -30,7 +30,7 @@ func (c *VoucherCategoriesController) ListCategories(ctx *gin.Context) {
 	helper.JSONResponse(ctx, http.StatusOK, products, "")
 }
 
-func (c *VoucherCategoriesController) DetailCategory(ctx *gin.Context) {
+func (c *VoucherCategoriesController) Detail(ctx *gin.Context) {
 	// Get the category ID from the route parameter
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -49,7 +49,7 @@ func (c *VoucherCategoriesController) DetailCategory(ctx *gin.Context) {
 	helper.JSONResponse(ctx, http.StatusOK, category, "")
 }
 
-func (c *VoucherCategoriesController) CreateCategory(ctx *gin.Context) {
+func (c *VoucherCategoriesController) Create(ctx *gin.Context) {
 	var newCategory models.VoucherCategories
 
 	// Bind the request body to the newCategory struct
@@ -58,7 +58,7 @@ func (c *VoucherCategoriesController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	createdCategory, err := c.service.CreateCategory(newCategory)
+	createdCategory, err := c.service.Create(newCategory)
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
 		return
@@ -67,7 +67,7 @@ func (c *VoucherCategoriesController) CreateCategory(ctx *gin.Context) {
 	helper.JSONResponse(ctx, http.StatusCreated, createdCategory, "")
 }
 
-func (c *VoucherCategoriesController) UpdateCategory(ctx *gin.Context) {
+func (c *VoucherCategoriesController) Update(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -83,7 +83,7 @@ func (c *VoucherCategoriesController) UpdateCategory(ctx *gin.Context) {
 	}
 
 	// Call the service to update the category by ID
-	updatedCategoryPtr, err := c.service.UpdateCategory(id, updatedCategory)
+	updatedCategoryPtr, err := c.service.Update(id, updatedCategory)
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
 		return
@@ -95,7 +95,7 @@ func (c *VoucherCategoriesController) UpdateCategory(ctx *gin.Context) {
 	helper.JSONResponse(ctx, http.StatusOK, updatedCategory, "")
 }
 
-func (c *VoucherCategoriesController) DeleteCategory(ctx *gin.Context) {
+func (c *VoucherCategoriesController) Delete(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -110,7 +110,7 @@ func (c *VoucherCategoriesController) DeleteCategory(ctx *gin.Context) {
 		return
 	}
 
-	err = c.service.DeleteCategory(id)
+	err = c.service.Delete(id)
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
 		return
