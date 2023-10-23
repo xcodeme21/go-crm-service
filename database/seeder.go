@@ -18,7 +18,7 @@ func VoucherCategories() {
 		return
 	}
 
-	var cek models.VoucherCategories
+	var cek models.VoucherCategory
 	db.Table("voucher_categories").First(&cek)
 	if cek.ID != 0 {
 		fmt.Println("Data found")
@@ -26,11 +26,11 @@ func VoucherCategories() {
 		var categories = []string{"Gadget & Accessories", "Food & Beverages", "Entertainment", "Health & Beauty", "Fashion", "Groceries"}
 
 		for _, category := range categories {
-			db.Create(&models.VoucherCategories{Name: category, CreatedAt: time.Now(), UpdatedAt: time.Now()})
+			db.Create(&models.VoucherCategory{Name: category, CreatedAt: time.Now(), UpdatedAt: time.Now()})
 		}
 
 		// Menampilkan data
-		var products []models.VoucherCategories
+		var products []models.VoucherCategory
 		db.Find(&products)
 		fmt.Println("Total products:", len(products))
 	}

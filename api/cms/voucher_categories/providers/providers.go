@@ -6,10 +6,10 @@ import (
 )
 
 type VoucherCategoriesProvider interface {
-	FindAll() ([]models.VoucherCategories, error)
-	Detail(id int) (*models.VoucherCategories, error)
-	Create(newCategory models.VoucherCategories) (*models.VoucherCategories, error)
-	Update(id int, updatedCategory models.VoucherCategories) (*models.VoucherCategories, error)
+	FindAll() ([]models.VoucherCategory, error)
+	Detail(id int) (*models.VoucherCategory, error)
+	Create(newCategory models.VoucherCategory) (*models.VoucherCategory, error)
+	Update(id int, updatedCategory models.VoucherCategory) (*models.VoucherCategory, error)
 	Delete(id int) error
 }
 
@@ -23,8 +23,8 @@ func NewDBVoucherCategoriesProvider(DB *gorm.DB) VoucherCategoriesProvider {
 	}
 }
 
-func (p *DBVoucherCategoriesProvider) FindAll() ([]models.VoucherCategories, error) {
-	var categories []models.VoucherCategories
+func (p *DBVoucherCategoriesProvider) FindAll() ([]models.VoucherCategory, error) {
+	var categories []models.VoucherCategory
 	err := p.DB.Order("id asc").Find(&categories).Error
 	if err != nil {
 		return nil, err
@@ -32,9 +32,9 @@ func (p *DBVoucherCategoriesProvider) FindAll() ([]models.VoucherCategories, err
 	return categories, nil
 }
 
-func (p *DBVoucherCategoriesProvider) Detail(id int) (*models.VoucherCategories, error) {
+func (p *DBVoucherCategoriesProvider) Detail(id int) (*models.VoucherCategory, error) {
 	// Implementation to retrieve a category by ID from the database
-	var category models.VoucherCategories
+	var category models.VoucherCategory
 	err := p.DB.First(&category, id).Error
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (p *DBVoucherCategoriesProvider) Detail(id int) (*models.VoucherCategories,
 	return &category, nil
 }
 
-func (p *DBVoucherCategoriesProvider) Create(newCategory models.VoucherCategories) (*models.VoucherCategories, error) {
+func (p *DBVoucherCategoriesProvider) Create(newCategory models.VoucherCategory) (*models.VoucherCategory, error) {
 	// Insert the new category into the database
 	if err := p.DB.Create(&newCategory).Error; err != nil {
 		return nil, err
@@ -50,9 +50,9 @@ func (p *DBVoucherCategoriesProvider) Create(newCategory models.VoucherCategorie
 	return &newCategory, nil
 }
 
-func (p *DBVoucherCategoriesProvider) Update(id int, updatedCategory models.VoucherCategories) (*models.VoucherCategories, error) {
+func (p *DBVoucherCategoriesProvider) Update(id int, updatedCategory models.VoucherCategory) (*models.VoucherCategory, error) {
 	// Fetch the existing category by ID
-	var existingCategory models.VoucherCategories
+	var existingCategory models.VoucherCategory
 	if err := p.DB.First(&existingCategory, id).Error; err != nil {
 		return nil, err
 	}
@@ -67,5 +67,5 @@ func (p *DBVoucherCategoriesProvider) Update(id int, updatedCategory models.Vouc
 
 func (p *DBVoucherCategoriesProvider) Delete(id int) error {
 	// Delete the category by ID
-	return p.DB.Delete(&models.VoucherCategories{}, id).Error
+	return p.DB.Delete(&models.VoucherCategory{}, id).Error
 }

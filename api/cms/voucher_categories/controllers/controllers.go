@@ -50,7 +50,7 @@ func (c *VoucherCategoriesController) Detail(ctx *gin.Context) {
 }
 
 func (c *VoucherCategoriesController) Create(ctx *gin.Context) {
-	var newCategory models.VoucherCategories
+	var newCategory models.VoucherCategory
 
 	// Bind the request body to the newCategory struct
 	if err := ctx.ShouldBindJSON(&newCategory); err != nil {
@@ -75,7 +75,7 @@ func (c *VoucherCategoriesController) Update(ctx *gin.Context) {
 		return
 	}
 
-	var updatedCategory models.VoucherCategories
+	var updatedCategory models.VoucherCategory
 
 	if err := ctx.ShouldBindJSON(&updatedCategory); err != nil {
 		helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())

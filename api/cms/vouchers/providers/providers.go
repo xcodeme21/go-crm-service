@@ -99,8 +99,8 @@ func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vo
 	return response, count
 }
 
-func (b *DBVouchersProvider) FindCategoryRelationByCategoryID(id int) models.VoucherCategories {
-	var rs models.VoucherCategories
+func (b *DBVouchersProvider) FindCategoryRelationByCategoryID(id int) models.VoucherCategory {
+	var rs models.VoucherCategory
 	b.DB.Where("id = ?", id).First(&rs)
 
 	return rs
