@@ -40,7 +40,7 @@ func (c *VoucherCategoriesController) Detail(ctx *gin.Context) {
 	}
 
 	// Call the service to retrieve the category details by ID
-	category, err := c.service.GetCategoryByID(id)
+	category, err := c.service.Detail(id)
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusNotFound, nil, "Category not found")
 		return
@@ -104,7 +104,7 @@ func (c *VoucherCategoriesController) Delete(ctx *gin.Context) {
 	}
 
 	// Check if the category exists
-	_, err = c.service.GetCategoryByID(id)
+	_, err = c.service.Detail(id)
 	if err != nil {
 		helper.JSONResponse(ctx, http.StatusNotFound, nil, "Category not found")
 		return

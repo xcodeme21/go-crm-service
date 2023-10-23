@@ -7,7 +7,7 @@ import (
 
 type VoucherCategoriesProvider interface {
 	FindAll() ([]models.VoucherCategories, error)
-	GetCategoryByID(id int) (*models.VoucherCategories, error)
+	Detail(id int) (*models.VoucherCategories, error)
 	Create(newCategory models.VoucherCategories) (*models.VoucherCategories, error)
 	Update(id int, updatedCategory models.VoucherCategories) (*models.VoucherCategories, error)
 	Delete(id int) error
@@ -32,7 +32,7 @@ func (p *DBVoucherCategoriesProvider) FindAll() ([]models.VoucherCategories, err
 	return categories, nil
 }
 
-func (p *DBVoucherCategoriesProvider) GetCategoryByID(id int) (*models.VoucherCategories, error) {
+func (p *DBVoucherCategoriesProvider) Detail(id int) (*models.VoucherCategories, error) {
 	// Implementation to retrieve a category by ID from the database
 	var category models.VoucherCategories
 	err := p.DB.First(&category, id).Error

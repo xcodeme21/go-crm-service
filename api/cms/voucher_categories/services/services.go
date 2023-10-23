@@ -19,8 +19,8 @@ func (s *VoucherCategoriesService) FindAll() ([]models.VoucherCategories, error)
 	return s.provider.FindAll()
 }
 
-func (s *VoucherCategoriesService) GetCategoryByID(id int) (*models.VoucherCategories, error) {
-	category, err := s.provider.GetCategoryByID(id)
+func (s *VoucherCategoriesService) Detail(id int) (*models.VoucherCategories, error) {
+	category, err := s.provider.Detail(id)
 	if err != nil {
 		return nil, err
 	}

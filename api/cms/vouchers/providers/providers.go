@@ -8,8 +8,8 @@ import (
 )
 
 type VouchersProvider interface {
-	FindAll(filters models.FilterVouchers) ([]models.Vouchers, int64)
-	GetCategoryByID(id int) (*models.Vouchers, error)
+	FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64)
+	Detail(id int) (*models.Vouchers, error)
 	Create(newCategory models.Vouchers) (*models.Vouchers, error)
 	Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error)
 	Delete(id int) error
@@ -25,9 +25,10 @@ func NewDBVouchersProvider(DB *gorm.DB) VouchersProvider {
 	}
 }
 
-func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vouchers, int64) {
+func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64) {
 	var data []models.Vouchers
 	var dataCount []models.Vouchers
+	var response []models.VouchersFindAllResponse
 
 	var count int64
 	sortBy := "id"
@@ -66,11 +67,46 @@ func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vo
 	} else {
 		q.Scopes(utils.Paginate(filters.Page, filters.PerPage)).Find(&data)
 	}
+
+	for _, item := range data {
+		var responseSingle models.VouchersFindAllResponse
+
+        category := b.FindCategoryRelationByCategoryID(item.CategoryId)
+
+        responseSingle.ID = item.ID
+        responseSingle.VoucherName = item.VoucherName
+        responseSingle.SeriesId = item.SeriesId
+        responseSingle.IsExternalVoucher = item.IsExternalVoucher
+        responseSingle.CampaignId = item.CampaignId
+        responseSingle.CampaignVoucherId = item.CampaignVoucherId
+        responseSingle.Point = item.Point
+        responseSingle.Tier = item.Tier
+        responseSingle.CategoryId = item.CategoryId
+        responseSingle.CategoryName = category.Name
+        responseSingle.IsLimited = item.IsLimited
+        responseSingle.StartDate = item.StartDate
+        responseSingle.EndDate = item.EndDate
+        responseSingle.Image = item.Image
+        responseSingle.Description = item.Description
+        responseSingle.Status = item.Status
+        responseSingle.CreatedAt = item.CreatedAt
+        responseSingle.UpdatedAt = item.UpdatedAt
+
+        response = append(response, responseSingle) // Tambahkan item ke slice dataCount (atau slice lainnya yang Anda buat)
+    }
+	
 	//fmt.Println(data)
-	return data, count
+	return response, count
 }
 
-func (p *DBVouchersProvider) GetCategoryByID(id int) (*models.Vouchers, error) {
+func (b *DBVouchersProvider) FindCategoryRelationByCategoryID(id int) models.VoucherCategories {
+	var rs models.VoucherCategories
+	b.DB.Where("id = ?", id).First(&rs)
+
+	return rs
+}
+
+func (p *DBVouchersProvider) Detail(id int) (*models.Vouchers, error) {
 	// Implementation to retrieve a category by ID from the database
 	var category models.Vouchers
 	err := p.DB.First(&category, id).Error

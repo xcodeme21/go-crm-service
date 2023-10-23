@@ -15,12 +15,12 @@ func NewVouchersService(provider providers.VouchersProvider) *VouchersService {
 	}
 }
 
-func (s *VouchersService) FindAll(filters models.FilterVouchers) ([]models.Vouchers, int64) {
+func (s *VouchersService) FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64) {
 	return s.provider.FindAll(filters)
 }
 
-func (s *VouchersService) GetCategoryByID(id int) (*models.Vouchers, error) {
-	category, err := s.provider.GetCategoryByID(id)
+func (s *VouchersService) Detail(id int) (*models.Vouchers, error) {
+	category, err := s.provider.Detail(id)
 	if err != nil {
 		return nil, err
 	}
