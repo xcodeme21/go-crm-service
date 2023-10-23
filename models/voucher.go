@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type Vouchers struct {
+type Voucher struct {
 	ID        int       `json:"id"`
 	VoucherName   string `json:"voucher_name"`
 	SeriesId   int `json:"series_id"`
@@ -24,7 +24,7 @@ type Vouchers struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type VouchersFindAllResponse struct {
+type VoucherFindAllResponse struct {
 	ID        int       `json:"id"`
 	VoucherName   string `json:"voucher_name"`
 	SeriesId   int `json:"series_id"`
@@ -45,7 +45,7 @@ type VouchersFindAllResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type FilterVouchers struct {
+type FilterVoucher struct {
 	Page    int    `json:"page"`
 	PerPage int    `json:"per_page"`
 	SortBy  string `json:"sort_by"`

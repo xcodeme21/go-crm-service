@@ -7,6 +7,7 @@ import (
 	"github.com/xcodeme21/go-crm-service/api/cms/vouchers/providers"
 	"github.com/xcodeme21/go-crm-service/api/cms/vouchers/services"
 	"github.com/xcodeme21/go-crm-service/database"
+	"github.com/xcodeme21/go-crm-service/middleware"
 )
 
 func VouchersRoutes(r *gin.Engine) {
@@ -21,6 +22,8 @@ func VouchersRoutes(r *gin.Engine) {
 	categoriesController := controllers.NewVouchersController(*VouchersService)
 
 	cmsGroup := r.Group("/api/cms/")
+	cmsGroup.Use(middleware.BasicAuthCmsMiddleware())
+
 	cmsGroup.GET("/vouchers", categoriesController.FindAll)
 	cmsGroup.GET("/vouchers/:id", categoriesController.Detail)
 	cmsGroup.POST("/vouchers", categoriesController.Create)

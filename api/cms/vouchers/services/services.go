@@ -15,11 +15,11 @@ func NewVouchersService(provider providers.VouchersProvider) *VouchersService {
 	}
 }
 
-func (s *VouchersService) FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64) {
+func (s *VouchersService) FindAll(filters models.FilterVoucher) ([]models.VoucherFindAllResponse, int64) {
 	return s.provider.FindAll(filters)
 }
 
-func (s *VouchersService) Detail(id int) (*models.Vouchers, error) {
+func (s *VouchersService) Detail(id int) (*models.Voucher, error) {
 	category, err := s.provider.Detail(id)
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (s *VouchersService) Detail(id int) (*models.Vouchers, error) {
 	return category, nil
 }
 
-func (s *VouchersService) Create(newCategory models.Vouchers) (*models.Vouchers, error) {
+func (s *VouchersService) Create(newCategory models.Voucher) (*models.Voucher, error) {
 	// Validate newCategory and perform any necessary business logic
 	// Create the new category in the provider
 	createdCategory, err := s.provider.Create(newCategory)
@@ -37,7 +37,7 @@ func (s *VouchersService) Create(newCategory models.Vouchers) (*models.Vouchers,
 	return createdCategory, nil
 }
 
-func (s *VouchersService) Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error) {
+func (s *VouchersService) Update(id int, updatedCategory models.Voucher) (*models.Voucher, error) {
 	// Validate updatedCategory and perform any necessary business logic
 	// Update the category in the provider
 	updatedCategoryFromProvider, err := s.provider.Update(id, updatedCategory)

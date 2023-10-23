@@ -31,7 +31,7 @@ func (c *VouchersController) FindAll(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(ctx.DefaultQuery("per_page", "10"))
 
-	filters := models.FilterVouchers{
+	filters := models.FilterVoucher{
 		Start:   start,
 		End:     end,
 		Status:  status,
@@ -72,7 +72,7 @@ func (c *VouchersController) Detail(ctx *gin.Context) {
 }
 
 func (c *VouchersController) Create(ctx *gin.Context) {
-	var newCategory models.Vouchers
+	var newCategory models.Voucher
 
 	// Bind the request body to the newCategory struct
 	if err := ctx.ShouldBindJSON(&newCategory); err != nil {
@@ -97,7 +97,7 @@ func (c *VouchersController) Update(ctx *gin.Context) {
 		return
 	}
 
-	var updatedCategory models.Vouchers
+	var updatedCategory models.Voucher
 
 	if err := ctx.ShouldBindJSON(&updatedCategory); err != nil {
 		helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())

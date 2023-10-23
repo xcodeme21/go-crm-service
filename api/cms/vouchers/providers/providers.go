@@ -8,10 +8,10 @@ import (
 )
 
 type VouchersProvider interface {
-	FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64)
-	Detail(id int) (*models.Vouchers, error)
-	Create(newCategory models.Vouchers) (*models.Vouchers, error)
-	Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error)
+	FindAll(filters models.FilterVoucher) ([]models.VoucherFindAllResponse, int64)
+	Detail(id int) (*models.Voucher, error)
+	Create(newCategory models.Voucher) (*models.Voucher, error)
+	Update(id int, updatedCategory models.Voucher) (*models.Voucher, error)
 	Delete(id int) error
 }
 
@@ -25,10 +25,10 @@ func NewDBVouchersProvider(DB *gorm.DB) VouchersProvider {
 	}
 }
 
-func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.VouchersFindAllResponse, int64) {
-	var data []models.Vouchers
-	var dataCount []models.Vouchers
-	var response []models.VouchersFindAllResponse
+func (b *DBVouchersProvider) FindAll(filters models.FilterVoucher) ([]models.VoucherFindAllResponse, int64) {
+	var data []models.Voucher
+	var dataCount []models.Voucher
+	var response []models.VoucherFindAllResponse
 
 	var count int64
 	sortBy := "id"
@@ -69,7 +69,7 @@ func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vo
 	}
 
 	for _, item := range data {
-		var responseSingle models.VouchersFindAllResponse
+		var responseSingle models.VoucherFindAllResponse
 
         category := b.FindCategoryRelationByCategoryID(item.CategoryId)
 
@@ -106,9 +106,9 @@ func (b *DBVouchersProvider) FindCategoryRelationByCategoryID(id int) models.Vou
 	return rs
 }
 
-func (p *DBVouchersProvider) Detail(id int) (*models.Vouchers, error) {
+func (p *DBVouchersProvider) Detail(id int) (*models.Voucher, error) {
 	// Implementation to retrieve a category by ID from the database
-	var category models.Vouchers
+	var category models.Voucher
 	err := p.DB.First(&category, id).Error
 	if err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ func (p *DBVouchersProvider) Detail(id int) (*models.Vouchers, error) {
 	return &category, nil
 }
 
-func (p *DBVouchersProvider) Create(newCategory models.Vouchers) (*models.Vouchers, error) {
+func (p *DBVouchersProvider) Create(newCategory models.Voucher) (*models.Voucher, error) {
 	// Insert the new category into the database
 	if err := p.DB.Create(&newCategory).Error; err != nil {
 		return nil, err
@@ -124,9 +124,9 @@ func (p *DBVouchersProvider) Create(newCategory models.Vouchers) (*models.Vouche
 	return &newCategory, nil
 }
 
-func (p *DBVouchersProvider) Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error) {
+func (p *DBVouchersProvider) Update(id int, updatedCategory models.Voucher) (*models.Voucher, error) {
 	// Fetch the existing category by ID
-	var existingCategory models.Vouchers
+	var existingCategory models.Voucher
 	if err := p.DB.First(&existingCategory, id).Error; err != nil {
 		return nil, err
 	}
@@ -141,5 +141,5 @@ func (p *DBVouchersProvider) Update(id int, updatedCategory models.Vouchers) (*m
 
 func (p *DBVouchersProvider) Delete(id int) error {
 	// Delete the category by ID
-	return p.DB.Delete(&models.Vouchers{}, id).Error
+	return p.DB.Delete(&models.Voucher{}, id).Error
 }
