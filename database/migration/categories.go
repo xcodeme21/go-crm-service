@@ -5,10 +5,10 @@ import (
 )
 
 // VoucherCategories :nodoc
-type VoucherCategories struct {
-	gorm.Model
-	Name   string `gorm:"type:varchar(150);unique"`
-	Status bool   `gorm:"type:boolean;default:true;"`
+type VoucherCategory struct {
+    gorm.Model
+    Name   string `gorm:"type:varchar(150);unique;not null"`
+    Status bool   `gorm:"type:boolean;default:true"`
 }
 
 // MigrateVoucherCategories :nodoc
