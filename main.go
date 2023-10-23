@@ -66,6 +66,7 @@ func main() {
     database.VoucherCategories()
 
     routes.VoucherCategoriesRoutes(r)
+    routes.VouchersRoutes(r)
 
     port := os.Getenv("PORT")
     r.NoRoute(lostInSpce)
