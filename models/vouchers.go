@@ -23,3 +23,14 @@ type Vouchers struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type FilterVouchers struct {
+	Page    int    `json:"page"`
+	PerPage int    `json:"per_page"`
+	SortBy  string `json:"sort_by"`
+	SortDir string `json:"sort_dir"`
+	Start   string `json:"start_date"`
+	End     string `json:"end_date"`
+	Status  string `json:"status"`
+	Search  string `json:"search"`
+}

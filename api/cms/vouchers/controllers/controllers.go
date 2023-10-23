@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xcodeme21/go-crm-service/api/cms/vouchers/services"
@@ -20,14 +21,35 @@ func NewVouchersController(service services.VouchersService) *VouchersController
 	}
 }
 
-func (c *VouchersController) ListVouchers(ctx *gin.Context) {
-	products, err := c.service.ListVouchers()
-	if err != nil {
-		helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
-		return
+func (c *VouchersController) FindAll(ctx *gin.Context) {
+	var paginate models.Pagination
+	
+	start := ctx.Query("start_date")
+	end := ctx.Query("end_date")
+	status := ctx.Query("status")
+	search := ctx.Query("search")
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	perPage, _ := strconv.Atoi(ctx.DefaultQuery("per_page", "10"))
+
+	filters := models.FilterVouchers{
+		Start:   start,
+		End:     end,
+		Status:  status,
+		Search:  search,
+		Page:    page,
+		PerPage: perPage,
+		SortBy:  ctx.DefaultQuery("sort_by", "id"),
+		SortDir: strings.ToUpper(ctx.DefaultQuery("sort_dir", "DESC")),
 	}
 
-	helper.JSONResponse(ctx, http.StatusOK, products, "")
+	otherFilters := map[string]string{
+	}
+
+	data, count := c.service.FindAll(filters)
+
+	paginate = helper.GenerateBasicPagination(ctx, otherFilters, data, count)
+
+	helper.JSONResponse(ctx, http.StatusOK, paginate, "")
 }
 
 func (c *VouchersController) Detail(ctx *gin.Context) {

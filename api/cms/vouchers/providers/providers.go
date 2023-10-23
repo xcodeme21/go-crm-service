@@ -3,10 +3,12 @@ package providers
 import (
 	"github.com/xcodeme21/go-crm-service/models"
 	"gorm.io/gorm"
+	"fmt"
+	utils "github.com/xcodeme21/go-crm-service/utils"
 )
 
 type VouchersProvider interface {
-	FindAll() ([]models.Vouchers, error)
+	FindAll(filters models.FilterVouchers) ([]models.Vouchers, int64)
 	GetCategoryByID(id int) (*models.Vouchers, error)
 	Create(newCategory models.Vouchers) (*models.Vouchers, error)
 	Update(id int, updatedCategory models.Vouchers) (*models.Vouchers, error)
@@ -23,13 +25,49 @@ func NewDBVouchersProvider(DB *gorm.DB) VouchersProvider {
 	}
 }
 
-func (p *DBVouchersProvider) FindAll() ([]models.Vouchers, error) {
-	var categories []models.Vouchers
-	err := p.DB.Order("id asc").Find(&categories).Error
-	if err != nil {
-		return nil, err
+func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vouchers, int64) {
+	var data []models.Vouchers
+	var dataCount []models.Vouchers
+
+	var count int64
+	sortBy := "id"
+	sortDir := "DESC"
+
+	if filters.SortBy != "" {
+		sortBy = filters.SortBy
 	}
-	return categories, nil
+	if filters.SortDir == "ASC" {
+		sortDir = filters.SortDir
+	}
+	q := b.DB.Order(fmt.Sprintf(`%s %s`, sortBy, sortDir))
+
+	if filters.Status != "" {
+		q.Where("status = ?", filters.Status)
+	}
+
+	if filters.Start != "" && filters.End == "" {
+		q.Where("start_date >= ?", filters.Start)
+	} else if filters.Start == "" && filters.End != "" {
+		q.Where("end_date <= ?", filters.End)
+	} else if filters.Start != "" && filters.End != "" {
+		q.Where("start_date >= ? AND end_date <= ?", filters.Start, filters.End)
+	}	
+
+	if filters.Search != "" {
+		q.Where("voucher_name ILIKE ?", "%"+filters.Search+"%")
+		q.Or("series_id = ?", filters.Search)
+	}
+
+	q.Find(&dataCount).Count(&count)
+
+	// Untuk Export tidak perlu pagination
+	if filters.Page == -1 && filters.PerPage == -1 {
+		q.Find(&data)
+	} else {
+		q.Scopes(utils.Paginate(filters.Page, filters.PerPage)).Find(&data)
+	}
+	//fmt.Println(data)
+	return data, count
 }
 
 func (p *DBVouchersProvider) GetCategoryByID(id int) (*models.Vouchers, error) {
