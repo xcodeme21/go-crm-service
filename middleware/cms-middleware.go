@@ -4,7 +4,6 @@ import (
     "net/http"
     "github.com/gin-gonic/gin"
     "os"
-    "fmt"
 )
 
 // BasicAuthCmsMiddleware adalah middleware untuk otentikasi Basic Auth
