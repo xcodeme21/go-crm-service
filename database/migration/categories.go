@@ -5,7 +5,7 @@ import (
 )
 
 // VoucherCategories :nodoc
-type VoucherCategory struct {
+type VoucherCategories struct {
     gorm.Model
     Name   string `gorm:"type:varchar(150);unique;not null"`
     Status bool   `gorm:"type:boolean;default:true"`
