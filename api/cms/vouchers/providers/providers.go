@@ -54,9 +54,9 @@ func (b *DBVouchersProvider) FindAll(filters models.FilterVouchers) ([]models.Vo
 	}	
 
 	if filters.Search != "" {
-		q.Where("voucher_name ILIKE ?", "%"+filters.Search+"%")
-		q.Or("series_id = ?", filters.Search)
+		q.Where("series_id = ?", filters.Search)
 	}
+	
 
 	q.Find(&dataCount).Count(&count)
 
