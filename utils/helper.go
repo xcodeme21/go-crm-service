@@ -170,8 +170,33 @@ func Tiering(tier string) string {
 
 	// Join the tiers with a comma separator
 	tierString := strings.Join(response, ",")
-	fmt.Println(tierString)
 
 	return tierString
 }
+
+func GetDateFormat(name string) string {
+	name = strings.ToUpper(name)
+	layout := map[string]string{
+		"SQL_DATE":       "2006-01-02",
+		"SQL_TIME":       "15:04:05",
+		"SQL_DATE_TIME":  "2006-01-02 15:04:05",
+		"SAP_DATE":       "20060102",
+		"SAP_TIME":       "150405",
+		"ISO_8601":       "2006-01-02T15:04:05-0700",
+		"US_DATE":        "January 2, 2006",
+		"US_SHORT_DATE":  "Jan 2, 2006",
+		"DD-MM-YYYY":     "02-01-2006", // AZEC DATE FORMAT
+		"DD-MM-YY":       "02-01-06",
+		"DD-MMM-YYYY":    "02-Jan-2006",
+		"DD MMMM YYYY":   "02 January 2006",
+		"ID_DATE":        "2 January 2006",
+		"YYYYMMDDHHIISS": "20060102150405",
+	}
+
+	if value, ok := layout[name]; ok {
+		return value
+	}
+	return "00"
+}
+
 
