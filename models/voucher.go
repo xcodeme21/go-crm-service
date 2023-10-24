@@ -33,6 +33,7 @@ type VoucherFindAllResponse struct {
 	CampaignVoucherId   int `json:"campaign_voucher_id"`
 	Point   int64 `json:"point"`
 	Tier   string `json:"tier"`
+	TierName   string `json:"tier_name"`
 	CategoryId   int `json:"category_id"`
 	CategoryName         string `json:"category_name"`
 	IsLimited bool   `json:"is_limited"`

@@ -81,6 +81,7 @@ func (b *DBVouchersProvider) FindAll(filters models.FilterVoucher) ([]models.Vou
         responseSingle.CampaignVoucherId = item.CampaignVoucherId
         responseSingle.Point = item.Point
         responseSingle.Tier = item.Tier
+        responseSingle.TierName = utils.Tiering(item.Tier)
         responseSingle.CategoryId = item.CategoryId
         responseSingle.CategoryName = category.Name
         responseSingle.IsLimited = item.IsLimited

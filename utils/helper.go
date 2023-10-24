@@ -147,3 +147,31 @@ func Paginate(page int, perPage int) func(db *gorm.DB) *gorm.DB {
 		return db.Offset(offset).Limit(perPage)
 	}
 }
+
+func Tiering(tier string) string {
+	tierArray := strings.Split(tier, ",")
+	var response []string
+
+	for _, item := range tierArray {
+		var rs = ""
+
+		if item == "1" {
+			rs = "Crew"
+		} else if item == "2" {
+			rs = "Co-Pilot"
+		} else if item == "3" {
+			rs = "Pilot"
+		} else {
+			rs = "Spacetronot"
+		}
+
+		response = append(response, rs)
+	}
+
+	// Join the tiers with a comma separator
+	tierString := strings.Join(response, ",")
+	fmt.Println(tierString)
+
+	return tierString
+}
+
