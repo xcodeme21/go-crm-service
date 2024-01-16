@@ -170,14 +170,14 @@ func (c *VouchersController) Delete(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		helper.JSONResponse(ctx, http.StatusBadRequest, nil, "Invalid category ID")
+		helper.JSONResponse(ctx, http.StatusBadRequest, nil, "Invalid voucher ID")
 		return
 	}
 
-	// Check if the category exists
+	// Check if the voucher exists
 	_, err = c.service.Detail(id)
 	if err != nil {
-		helper.JSONResponse(ctx, http.StatusNotFound, nil, "Category not found")
+		helper.JSONResponse(ctx, http.StatusNotFound, nil, "Voucher not found")
 		return
 	}
 
@@ -187,5 +187,5 @@ func (c *VouchersController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	helper.JSONResponse(ctx, http.StatusOK, nil, "Category deleted successfully")
+	helper.JSONResponse(ctx, http.StatusOK, nil, "Voucher deleted successfully")
 }
