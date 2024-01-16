@@ -101,6 +101,11 @@ func (c *VouchersController) Create(ctx *gin.Context) {
 		return
 	}
 
+	_, err = c.service.Detail(voucherRequest.CategoryId)
+	if err != nil {
+		helper.JSONResponse(ctx, http.StatusNotFound, nil, "Category not found")
+		return
+	}
     
     // Create a Voucher object
     result := models.Voucher{
@@ -132,143 +137,6 @@ func (c *VouchersController) Create(ctx *gin.Context) {
 
     helper.JSONResponse(ctx, http.StatusOK, createdCategory, "Voucher created successfully")
 }
-
-// func (c *VouchersController) Creates(ctx *gin.Context) {
-//     var voucherRequest models.VoucherRequest
-
-//     // Bind the request body to the voucherRequest struct
-//     if err := ctx.ShouldBindJSON(&voucherRequest); err != nil {
-//         // Handle JSON binding error
-//         helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//         return
-//     }
-
-//     var credentials models.GoogleCloudCredential
-
-//     // Retrieve Google Cloud Storage bucket name from environment variable
-//     storageBucket := os.Getenv("GOOGLE_CLOUD_STORAGE_BUCKET")
-//     appengineCtx := appengine.NewContext(ctx.Request)
-
-//     // Get Google Cloud Storage credentials and create a storage client
-//     credentials = helper.GetGoogleCloudStorageCredentials()
-//     jsonCredential, err := json.Marshal(credentials)
-
-//     if err != nil {
-//         // Handle credential error
-//         helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//         return
-//     }
-
-//     storageClient, err := storage.NewClient(appengineCtx, option.WithCredentialsJSON(jsonCredential))
-//     if err != nil {
-//         // Handle storage client creation error
-//         helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//         return
-//     }
-
-//     // Define the source and validate and process the uploaded file
-//     var source = "crm_vouchers"
-//     file, err := ctx.FormFile("file")
-//     if err != nil {
-//         // Handle file retrieval error
-//         helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//         return
-//     }
-// 	// Open the uploaded file
-// file, err := file.Open()
-// if err != nil {
-//     // Handle file opening error
-//     helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//     return
-// }
-// defer file.Close() // Close the file when you're done with it
-
-// // Validate the file size
-// size := int(file.(Sizer).Size())
-// max := 1024 * 1024 * 2
-
-// if size > max {
-//     // Handle file size validation error
-//     helper.JSONResponse(ctx, http.StatusBadRequest, nil, "File size exceeds the maximum allowed.")
-//     return
-// }
-
-
-//     defer file.Close()
-
-//     // Generate a unique filename for the uploaded file
-//     fileName := file.Filename
-//     arrFileName := strings.Split(fileName, ".")
-//     ext := arrFileName[len(arrFileName)-1]
-
-//     newTime := time.Now().Format(helper.GetDateFormat("YYYYMMDDHHIISS"))
-
-//     bi := big.NewInt(0)
-//     h := md5.New()
-//     h.Write([]byte(newTime))
-//     hexstr := hex.EncodeToString(h.Sum(nil))
-//     bi.SetString(hexstr, 16)
-
-//     fileNameMD5 := bi.String()
-
-//     // Create a writer to upload the file to Google Cloud Storage
-//     sw := storageClient.Bucket(storageBucket).Object(source + "/" + fileNameMD5 + "." + ext).NewWriter(appengineCtx)
-
-//     if _, err := io.Copy(sw, file); err != nil {
-//         // Handle file upload error
-//         helper.JSONResponse(ctx, http.StatusBadRequest, nil, err.Error())
-//         return
-//     }
-
-//     if err := sw.Close(); err != nil {
-//         // Handle writer closing error
-//         helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
-//         return
-//     }
-
-//     // Construct the URL of the uploaded file
-//     u, err := url.Parse("/" + storageBucket + "/" + sw.Attrs().Name)
-//     if err != nil {
-//         // Handle URL parsing error
-//         helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
-//         return
-//     }
-
-//     voucherRequest.Image = "https://storage.googleapis.com" + u.EscapedPath()
-
-//     // Create a Voucher object
-//     result := models.Voucher{
-//         VoucherName:       voucherRequest.VoucherName,
-//         SeriesId:          voucherRequest.SeriesId,
-//         IsExternalVoucher: voucherRequest.IsExternalVoucher,
-//         CampaignId:        voucherRequest.CampaignId,
-//         CampaignVoucherId: voucherRequest.CampaignVoucherId,
-//         Point:             voucherRequest.Point,
-//         Tier:              voucherRequest.Tier,
-//         CategoryId:        voucherRequest.CategoryId,
-//         IsLimited:         voucherRequest.IsLimited,
-//         StartDate:         voucherRequest.StartDate,
-//         EndDate:           voucherRequest.EndDate,
-//         Image:             voucherRequest.Image,
-//         Description:       voucherRequest.Description,
-//         Status:            voucherRequest.Status,
-//         CreatedAt:         time.Now(),
-//         UpdatedAt:         time.Now(),
-//     }
-
-//     // Save the Voucher to the database
-//     createdCategory, err := c.service.Create(result)
-//     if err != nil {
-//         // Handle database save error
-//         helper.JSONResponse(ctx, http.StatusInternalServerError, nil, err.Error())
-//         return
-//     }
-
-//     // Respond with the created Voucher
-//     helper.JSONResponse(ctx, http.StatusCreated, createdCategory, "")
-// }
-
-
 
 func (c *VouchersController) Update(ctx *gin.Context) {
 	idStr := ctx.Param("id")
